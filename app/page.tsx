@@ -208,6 +208,13 @@ export default function ScratchCardGame() {
       });
       
       setIsSubmitted(true);
+      
+      // Show toast notification
+      toast.success("Your card is ready! Scratch to reveal!", {
+        duration: 4000,
+        icon: "✨",
+      });
+
     } catch (error) {
       console.error(error);
       toast.error("Failed to generate card. Please try again.", {
@@ -467,7 +474,13 @@ export default function ScratchCardGame() {
                   )}
                 </motion.div>
                 {!isRevealed && (
-                  <div className="absolute inset-0 shadow-[inset_0_0_0_2px_rgba(16,185,129,0.2)] rounded-2xl border-emerald-500/40 border-2">
+                  <div 
+                    className={`absolute inset-0 z-10 ${
+                      isSubmitted && !isRevealed 
+                        ? 'animate-pulse' 
+                        : ''
+                    }`}
+                  >
                     <canvas
                       ref={canvasRef}
                       onMouseDown={isSubmitted ? handleMouseDown : undefined}
@@ -476,7 +489,11 @@ export default function ScratchCardGame() {
                       onTouchStart={isSubmitted ? handleMouseDown : undefined}
                       onTouchEnd={isSubmitted ? handleMouseUp : undefined}
                       onTouchMove={isSubmitted ? handleMouseMove : undefined}
-                      className={`w-full h-full z-10 ${isSubmitted ? 'cursor-pointer' : 'cursor-default'}`}
+                      className={`w-full h-full cursor-pointer rounded-xl border-2 ${
+                        isSubmitted && !isRevealed
+                          ? 'border-emerald-500/50 shadow-glow'
+                          : 'border-emerald-500/20'
+                      }`}
                     />
                   </div>
                 )}
@@ -577,3 +594,4 @@ export default function ScratchCardGame() {
     </div>
   );
 }
+

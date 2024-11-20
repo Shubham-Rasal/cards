@@ -56,6 +56,22 @@ const config: Config = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		}
+  	},
+  	keyframes: {
+  		'pulse-glow': {
+  			'0%': {
+  				boxShadow: '0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981',
+  			},
+  			'50%': {
+  				boxShadow: '0 0 10px #10b981, 0 0 20px #10b981, 0 0 30px #10b981',
+  			},
+  			'100%': {
+  				boxShadow: '0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981',
+  			}
+  		}
+  	},
+  	animations: {
+  		'pulse-glow': 'pulse-glow 2s infinite'
   	}
   },
   plugins: [require("tailwindcss-animate")],

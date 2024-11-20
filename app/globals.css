@@ -76,3 +76,19 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981;
+  }
+  50% {
+    box-shadow: 0 0 10px #10b981, 0 0 20px #10b981, 0 0 30px #10b981;
+  }
+  100% {
+    box-shadow: 0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981;
+  }
+}
+
+.shadow-glow {
+  animation: pulse-glow 2s infinite;
+}
