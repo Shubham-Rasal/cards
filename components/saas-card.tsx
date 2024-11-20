@@ -18,7 +18,6 @@ interface SaasCardProps {
 export function SaasCard({ 
   name = "example.com", 
   imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg",
-  description = "A cloud-native SaaS solution",
   url = "https://example.com",
   rank = "A",
   attackPower = 5,
@@ -91,7 +90,6 @@ export function SaasCard({
               {rank}
             </Badge>
           </div>
-          <p className="text-sm" style={{ color: `${colors.text}CC` }}>{description}</p>
           <div className="mt-2 p-2 rounded-lg border"
                style={{ 
                  backgroundColor: `${colors.darker}80`,
@@ -133,16 +131,7 @@ export function SaasCard({
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            <div className="flex items-center gap-2 text-sm">
-              <Shield className="w-4 h-4" style={{ color: colors.light }} />
-              <span>Enterprise Ready</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <TrendingUp className="w-4 h-4" style={{ color: colors.light }} />
-              <span>High ROI</span>
-            </div>
-          </div>
+         
         </div>
       </div>
       <div className="border-t p-4 flex justify-between items-center"
@@ -150,7 +139,6 @@ export function SaasCard({
              borderColor: `${colors.primary}20`,
              backgroundColor: `${colors.darker}30`
            }}>
-        <div className="text-sm" style={{ color: `${colors.text}CC` }}>Website Preview</div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4" style={{ color: colors.light, fill: colors.primary }} />

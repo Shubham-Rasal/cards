@@ -60,13 +60,13 @@ const config: Config = {
   	keyframes: {
   		'pulse-glow': {
   			'0%': {
-  				boxShadow: '0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981',
+  				boxShadow: '0 0 15px #10b981, 0 0 30px #10b981, 0 0 45px #10b981',
   			},
   			'50%': {
-  				boxShadow: '0 0 10px #10b981, 0 0 20px #10b981, 0 0 30px #10b981',
+  				boxShadow: '0 0 30px #10b981, 0 0 60px #10b981, 0 0 90px #10b981',
   			},
   			'100%': {
-  				boxShadow: '0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981',
+  				boxShadow: '0 0 15px #10b981, 0 0 30px #10b981, 0 0 45px #10b981',
   			}
   		}
   	},

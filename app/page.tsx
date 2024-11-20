@@ -12,8 +12,8 @@ import { formatTime } from "@/lib/utils";
 import Link from "next/link";
 
 export default function ScratchCardGame() {
-  const [url, setUrl] = useState("https://www.maximalstudio.in/");
-  const [description, setDescription] = useState("From Concept to Clicks in 2 Weeks.");
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
   const [isRevealed, setIsRevealed] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -195,7 +195,8 @@ export default function ScratchCardGame() {
 
     try {
       const normalizedUrl = normalizeUrl(url);
-      const screenshotUrl = await getWebsiteScreenshot(normalizedUrl);
+      // const screenshotUrl = await getWebsiteScreenshot(normalizedUrl);
+      const screenshotUrl = 'https://picsum.photos/800/600';
       const powerData = await generatePower(url, description);
       
       setWebsite({
@@ -464,7 +465,6 @@ export default function ScratchCardGame() {
                     <SaasCard
                       name={website.name}
                       imageUrl={website.image}
-                      description="Website Screenshot Preview"
                       url={url}
                       rank={website.rank}
                       attackPower={website.attackPower}
@@ -491,7 +491,7 @@ export default function ScratchCardGame() {
                       onTouchMove={isSubmitted ? handleMouseMove : undefined}
                       className={`w-full h-full cursor-pointer rounded-xl border-2 ${
                         isSubmitted && !isRevealed
-                          ? 'border-emerald-500/50 shadow-glow'
+                          ? 'border-emerald-500/50 shadow-md'
                           : 'border-emerald-500/20'
                       }`}
                     />
@@ -534,10 +534,10 @@ export default function ScratchCardGame() {
           >
             <div className="flex justify-center mb-4">
               <div className="relative">
-                <div className="w-20 h-24 border-2 border-emerald-500/20 rounded-xl absolute -left-16 -rotate-6" />
-                <div className="w-20 h-24 border-2 border-emerald-500/20 rounded-xl absolute -right-16 rotate-6" />
-                <div className="w-20 h-24 border-2 border-emerald-500/20 rounded-xl relative bg-[#2c2c2c] flex items-center justify-center">
-                  <div className="w-20 h-24 rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 flex items-center justify-center">
+                <div className="w-24 h-32 border-2 border-emerald-500/20 rounded-xl absolute -left-16 -rotate-6" />
+                <div className="w-24 h-32 border-2 border-emerald-500/20 rounded-xl absolute -right-16 rotate-6" />
+                <div className="w-24 h-32 border-2 border-emerald-500/20 rounded-xl relative bg-[#2c2c2c] flex items-center justify-center">
+                  <div className="w-24 h-32 rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 flex items-center justify-center">
                     <img
                       src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
                       alt="Pokeball"
@@ -547,9 +547,9 @@ export default function ScratchCardGame() {
                 </div>
               </div>
             </div>
-            <h2 className="text-xl font-semibold text-white mb-2">Enter Website URL</h2>
+            <h2 className="text-xl font-semibold text-white mb-2">Enter your SaaS URL</h2>
             <p className="text-gray-400">
-              Enter a website URL to create a beautiful preview card. Scratch to reveal!
+              Enter the URL of your SaaS and describe it in one line to get started.
             </p>
           </motion.div>
         )}
