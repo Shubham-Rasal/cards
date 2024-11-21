@@ -82,30 +82,30 @@ export default function ScratchCardGame() {
 
   const getWebsiteScreenshot = async (url: string) => {
     try {
-      // const response = await fetch('/api/shot', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ url }),
-      // });
+      const response = await fetch('/api/shot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
       
 
       
-      // if (!response.ok) {
-      //   const error = await response.json();
-      //   throw new Error(error.details || 'Failed to get screenshot');
-      // }
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.details || 'Failed to get screenshot');
+      }
 
-      // const data = await response.json();
+      const data = await response.json();
       
       // toast.success("Screenshot captured!", {
       //   description: `Captured in ${formatTime(duration)}`,
       //   duration: 3000,
       // });
 
-      // return data.screenshot;
-      return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+      return data.screenshot;
+      // return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
     } catch (error) {
       console.error('Error getting screenshot:', error);
       toast.error("Failed to get screenshot", {
@@ -538,18 +538,39 @@ export default function ScratchCardGame() {
                 <div className="w-24 h-32 border-2 border-emerald-500/20 rounded-xl relative bg-[#2c2c2c] flex items-center justify-center">
                   <div className="w-24 h-32 rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 flex items-center justify-center">
                     <img
-                      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
+                      src="/sample.png"
                       alt="Pokeball"
-                      className="w-16 h-16 object-contain"
+                      className="w-20 h-28 object-contain"
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <h2 className="text-base font-semibold text-white mb-2">Enter your SaaS URL</h2>
+            <h2 className="text-base font-semibold text-white mb-2">Enter site url</h2>
             <p className="text-gray-400">
               Enter the URL of your site and get a special power card to show off your site&apos;s power.
             </p>
+            <div className="mt-8 text-center text-sm text-emerald-400/60">
+              <div className="flex items-center justify-center gap-4">
+                <a
+                  href="https://github.com/Shubham-Rasal/cards"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  GitHub
+                </a>
+                <span>•</span>
+                <a
+                  href="https://maximalstudio.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  Maximal Studio
+                </a>
+              </div>
+            </div>
           </motion.div>
         )}
       </div>

@@ -26,10 +26,14 @@ export default function RootLayout({
         className={`antialiased relative ${silkscreen.className} ${silkscreen.variable}`}
       >
         <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#121212_50%,#10b981_150%)]"></div>
-        {children}
+        <div className="flex flex-col min-h-screen">
+          <main className="flex-grow">
+            {children}
+          </main>
+          
+        </div>
         <Toaster richColors/>
       </body>
-      
     </html>
   );
 }
