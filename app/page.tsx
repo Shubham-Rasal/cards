@@ -104,10 +104,10 @@ export default function ScratchCardGame() {
         reader.readAsDataURL(blob);
       });
 
-      toast.success("Screenshot captured!", {
-        description: `Captured in ${formatTime(duration)}`,
-        duration: 3000,
-      });
+      // toast.success("Screenshot captured!", {
+      //   description: `Captured in ${formatTime(duration)}`,
+      //   duration: 3000,
+      // });
 
       return base64;
     } catch (error) {
