@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         hiddenAdvantage: {
           type: SchemaType.STRING,
           maxLength: 100,
-          description: "Hidden advantage or special feature of the website",
+          description: "A quirky thing about the website",
           nullable: false,
         }
       },
@@ -90,7 +90,7 @@ The website is ${url} and the description is ${description}.
 Generate the power stats based on the website's characteristics and features.
 Rank should be from F to S (S being the highest).
 Attack and defence power should be between 1 and 10.
-Hidden advantage should describe a unique strength or special feature of the website in 1 short sentence.
+Hidden advantage should describe a unique quirky thing of the website in 1 short sentence.
 
 Here are 20 quirky "hidden powers" for example
 

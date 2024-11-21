@@ -27,6 +27,7 @@ export default function ScratchCardGame() {
     attackPower: number;
     defencePower: number;
     hiddenAdvantage: string;
+    url: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
@@ -81,42 +82,37 @@ export default function ScratchCardGame() {
 
   const getWebsiteScreenshot = async (url: string) => {
     try {
-      const startTime = performance.now();
+      // const response = await fetch('/api/shot', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ url }),
+      // });
       
-      // Encode the URL properly
-      const encodedUrl = encodeURIComponent(url);
-      const apiUrl = `https://api.screenshotone.com/take?access_key=vO3NeqV9vlvXrQ&url=${encodedUrl}&format=jpg&block_ads=true&block_cookie_banners=true&block_banners_by_heuristics=false&block_trackers=true&delay=0&timeout=60&response_type=by_format&image_quality=80`;
 
-      const response = await fetch(apiUrl);
       
-      const endTime = performance.now();
-      const duration = endTime - startTime;
+      // if (!response.ok) {
+      //   const error = await response.json();
+      //   throw new Error(error.details || 'Failed to get screenshot');
+      // }
+
+      // const data = await response.json();
       
-      if (!response.ok) {
-        throw new Error(`Failed to get screenshot: ${response.statusText}`);
-      }
-
-      // Convert the response to base64
-      const blob = await response.blob();
-      const base64 = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.readAsDataURL(blob);
-      });
-
       // toast.success("Screenshot captured!", {
       //   description: `Captured in ${formatTime(duration)}`,
       //   duration: 3000,
       // });
 
-      return base64;
+      // return data.screenshot;
+      return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
     } catch (error) {
       console.error('Error getting screenshot:', error);
       toast.error("Failed to get screenshot", {
         description: "There was an error capturing the website. Please check the URL and try again.",
         duration: 3000,
       });
-      return "";
+      return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
     }
   };
 
@@ -166,10 +162,9 @@ export default function ScratchCardGame() {
       const normalizedUrl = normalizeUrl(url);
       new URL(normalizedUrl);
       
-      // Additional validation for domain format - site.com, http://site.com
-      const domainRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+      // Additional validation for domain format
+      const domainRegex = /^https?:\/\/([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
       
-
       return domainRegex.test(normalizedUrl);
     } catch (e) {
       return false;
@@ -206,7 +201,8 @@ export default function ScratchCardGame() {
         rank: powerData.rank,
         attackPower: powerData.attackPower,
         defencePower: powerData.defencePower,
-        hiddenAdvantage: powerData.hiddenAdvantage
+        hiddenAdvantage: powerData.hiddenAdvantage,
+        url: normalizedUrl
       });
       
       setIsSubmitted(true);
@@ -317,7 +313,7 @@ export default function ScratchCardGame() {
             attackPower: website.attackPower,
             defencePower: website.defencePower,
             hiddenAdvantage: website.hiddenAdvantage,
-            url: url,
+            url: website.url,
           });
         }
       }
@@ -338,13 +334,6 @@ export default function ScratchCardGame() {
         skipAutoScale: true,
         style: {
           transform: 'scale(1)',
-          background: 'black',
-          width: '100%',
-          height: '100%',
-          margin: '0',
-          padding: '0',
-          border: 'none',
-          backgroundColor: 'black',
         },
       });
 
@@ -377,7 +366,16 @@ export default function ScratchCardGame() {
             }),
           ],
         });
-      } 
+      } else {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'image/png': blob,
+          }),
+        ]);
+        toast.success('Image copied to clipboard');
+      }
+
+      
     
     } catch (error) {
       console.error('Error sharing card:', error);
@@ -388,7 +386,7 @@ export default function ScratchCardGame() {
   };
 
   return (
-    <div className="min-h-screen   bg-[#1a1a1a] text-white p-6 ">
+    <div className="min-h-screen text-white p-6">
       <div className="max-w-xs mx-auto space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col  items-center justify-center gap-2">
@@ -398,7 +396,6 @@ export default function ScratchCardGame() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
-              autoComplete="url"
               autoCorrect="off"
               autoCapitalize="off"
               pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
@@ -441,20 +438,20 @@ export default function ScratchCardGame() {
             >
               <div
                 ref={cardRef}
-                className={`w-[320px] h-[470px] rounded-2xl overflow-hidden relative shadow-xl shadow-emerald-500/50 ${
+                className={`w-[320px] h-[470px]  overflow-hidden relative shadow-xl shadow-emerald-500/50 ${
                   isLoading ? 'animate-pulse' : ''
                 }`}
               >
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="absolute inset-0 flex flex-col items-center justify-center text-emerald-100 rounded-2xl bg-[#1a1a1a] border-2 border-emerald-500/20"
+                  className="absolute inset-0 flex flex-col items-center justify-center text-emerald-100 bg-[#1a1a1a] "
                 >
                   {website && (
                     <SaasCard
                       name={website.name}
                       imageUrl={website.image}
-                      url={url}
+                      url={website.url}
                       rank={website.rank}
                       attackPower={website.attackPower}
                       defencePower={website.defencePower}
@@ -478,7 +475,7 @@ export default function ScratchCardGame() {
                       onTouchStart={isSubmitted ? handleMouseDown : undefined}
                       onTouchEnd={isSubmitted ? handleMouseUp : undefined}
                       onTouchMove={isSubmitted ? handleMouseMove : undefined}
-                      className={`w-full h-full cursor-pointer rounded-2xl border-2 ${
+                      className={`w-full h-full cursor-pointer border-2 ${
                         isSubmitted && !isRevealed
                           ? 'border-emerald-500/50 shadow-md'
                           : 'border-emerald-500/20'
@@ -513,7 +510,7 @@ export default function ScratchCardGame() {
                 
                 <Button
                   onClick={handleShare}
-                  disabled={isCopying || !website}
+                  disabled={!website}
                   className="px-6 py-2 h-full rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 text-emerald-400 hover:border-emerald-500/40 transition-colors duration-200 flex items-center gap-2"
                 >
                   
@@ -551,7 +548,7 @@ export default function ScratchCardGame() {
             </div>
             <h2 className="text-base font-semibold text-white mb-2">Enter your SaaS URL</h2>
             <p className="text-gray-400">
-              Enter the URL of your SaaS and describe it in one line to get started.
+              Enter the URL of your site and get a special power card to show off your site&apos;s power.
             </p>
           </motion.div>
         )}

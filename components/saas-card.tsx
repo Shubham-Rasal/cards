@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Cloud, Users, Zap, TrendingUp, Shield, Star, StarHalf } from 'lucide-react'
+import Link from "next/link"
 
 interface SaasCardProps {
   name?: string
@@ -25,7 +26,7 @@ export function SaasCard({
   return (
     <div className="card-body h-[470px] w-[320px] border-2 border-emerald-500/20 rounded-xl relative  text-emerald-50 shadow-xl shadow-emerald-200/20 z-0">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-emerald-500/5 pointer-events-none" />
-      <div className="relative z-10 p-2 space-y-4">
+      <div className="relative z-10 p-2 space-y-2">
         <div className="relative w-full h-48 mx-auto overflow-hidden rounded-lg border border-emerald-500/20">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-transparent to-emerald-500/20" />
           <img
@@ -42,8 +43,8 @@ export function SaasCard({
 
       
           </div>
-          <div className="my-1 p-1 rounded-tl-full rounded-br-full  bg-emerald-950/50 border border-emerald-500/20">
-            <p className="text-xs italic text-emerald-300">✨ {hiddenAdvantage}</p>
+          <div className="my-1 p-1 rounded-sm bg-emerald-950/50 border border-emerald-500/20">
+            <p className="text-[10px] italic text-emerald-200">✨ {hiddenAdvantage}</p>
           </div>
         </div>
         <div className="space-y-3">
@@ -74,6 +75,7 @@ export function SaasCard({
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-emerald-400" />  
                 <span className="text-sm">Rank</span>
               </div>
               <div className="flex items-center gap-1">
@@ -107,6 +109,11 @@ export function SaasCard({
           </div>
         </div>
       </div>
+
+      <div className="border-t border-emerald-500/20 bg-emerald-950/30 p-2 flex justify-between items-center text-xs text-emerald-400/80 gap-2">
+        Copyright   2024 <a href={url} target="_blank" className="underline">{name}</a>
+      </div>
+      
     </div>
   )
 }

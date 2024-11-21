@@ -23,8 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased ${silkscreen.className} ${silkscreen.variable}`}
+        className={`antialiased relative ${silkscreen.className} ${silkscreen.variable}`}
       >
+        <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#121212_50%,#10b981_150%)]"></div>
         {children}
         <Toaster richColors/>
       </body>
