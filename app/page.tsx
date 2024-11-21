@@ -14,7 +14,6 @@ import { toPng } from 'html-to-image';
 
 export default function ScratchCardGame() {
   const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
   const [isRevealed, setIsRevealed] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -36,7 +35,6 @@ export default function ScratchCardGame() {
     defencePower: number;
     hiddenAdvantage: string;
     url: string; 
-    description: string; 
     timestamp: number 
   }>>([]);
   const [inputDisabled, setInputDisabled] = useState(false);
@@ -60,7 +58,6 @@ export default function ScratchCardGame() {
     defencePower: number;
     hiddenAdvantage: string;
     url: string; 
-    description: string; 
   }) => {
     const newCard = { ...card, timestamp: Date.now() };
     const updatedCards = [newCard, ...pastCards].slice(0, 10); // Keep only last 10 cards
@@ -120,14 +117,14 @@ export default function ScratchCardGame() {
     }
   };
 
-  const generatePower = async (url: string, description: string) => {
+  const generatePower = async (url: string) => {
     try {
       const response = await fetch('/api/generate-power', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url, description }),
+        body: JSON.stringify({ url }),
       });
 
       if (!response.ok) {
@@ -198,8 +195,8 @@ export default function ScratchCardGame() {
       const normalizedUrl = normalizeUrl(url);
       // const screenshotUrl = await getWebsiteScreenshot(normalizedUrl);
       const screenshotUrl = 'https://picsum.photos/800/600';
-      const powerData = await generatePower(url, description);
-      
+      const powerData = await generatePower(url);
+    
       setWebsite({
         name: normalizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, ''),
         image: screenshotUrl,
@@ -230,7 +227,6 @@ export default function ScratchCardGame() {
 
   const handleReset = () => {
     setUrl("");
-    setDescription("");
     setIsRevealed(false);
     setIsDrawing(false);
     setIsSubmitted(false);
@@ -319,7 +315,6 @@ export default function ScratchCardGame() {
             defencePower: website.defencePower,
             hiddenAdvantage: website.hiddenAdvantage,
             url: url,
-            description: description
           });
         }
       }
@@ -379,7 +374,6 @@ export default function ScratchCardGame() {
             }),
           ],
         });
-        toast.success("Card shared successfully!");
       } else if (navigator.clipboard) {
         // Fallback to copying to clipboard
         const clipboardItem = new ClipboardItem({
@@ -422,18 +416,10 @@ export default function ScratchCardGame() {
               disabled={inputDisabled}
               className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-500 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
-            <Input
-              type="text"
-              placeholder="Your SaaS, in one line"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              disabled={inputDisabled}
-              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-500 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-            />
+            
             <Button
               onClick={isSubmitted ? handleReset : handleSubmit}
-              disabled={isLoading || !isValidUrl(url) || !description}
+              disabled={isLoading || !isValidUrl(url)}
               className={`w-full border-4 border-emerald-600  ${isSubmitted ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`}
             >
               {isLoading ? (

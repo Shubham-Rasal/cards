@@ -4,9 +4,9 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 export async function POST(request: NextRequest) {
   try {
-    let { url, description } = await request.json();
+    let { url } = await request.json();
 
-    if (!url || !description) {
+    if (!url) {
       return NextResponse.json(
         { error: 'URL and description are required' },
         { status: 400 }
@@ -84,7 +84,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const prompt = `Given a title and description for a website, generate a game card for the saas website.
+    const description = metas.ogDescription || metas.description || title;
+    const prompt = `Given a url and description for a website, generate a game card for the saas website.
 The website is ${url} and the description is ${description}.
 Generate the power stats based on the website's characteristics and features.
 Rank should be from F to S (S being the highest).
