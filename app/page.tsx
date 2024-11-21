@@ -11,9 +11,12 @@ import { SaasCard } from "@/components/saas-card";
 import { formatTime } from "@/lib/utils";
 import Link from "next/link";
 import { toPng } from 'html-to-image';
+import { useSearchParams } from "next/navigation";
 
 export default function ScratchCardGame() {
-  const [url, setUrl] = useState("");
+
+  const params = useSearchParams();
+   const [url, setUrl] = useState(params.get("url") || "");
   const [isRevealed, setIsRevealed] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -193,8 +196,8 @@ export default function ScratchCardGame() {
 
     try {
       const normalizedUrl = normalizeUrl(url);
-      // const screenshotUrl = await getWebsiteScreenshot(normalizedUrl);
-      const screenshotUrl = 'https://picsum.photos/800/600';
+      const screenshotUrl = await getWebsiteScreenshot(normalizedUrl);
+      // const screenshotUrl = 'https://picsum.photos/800/600';
       const powerData = await generatePower(url);
     
       setWebsite({
@@ -374,22 +377,8 @@ export default function ScratchCardGame() {
             }),
           ],
         });
-      } else if (navigator.clipboard) {
-        // Fallback to copying to clipboard
-        const clipboardItem = new ClipboardItem({
-          'image/png': blob,
-        });
-        await navigator.clipboard.write([clipboardItem]);
-        toast.success("Card image copied to clipboard!");
-      } else {
-        // Final fallback - download the image
-        const link = document.createElement('a');
-        link.download = 'power-card.png';
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        URL.revokeObjectURL(link.href);
-        toast.success("Card image downloaded!");
-      }
+      } 
+    
     } catch (error) {
       console.error('Error sharing card:', error);
       toast.error("Failed to share card");
@@ -434,7 +423,7 @@ export default function ScratchCardGame() {
                 </>
               ) : (
                 <>
-                  <Plus className="mr-2 h-4 w-4" />
+                  <Wand className="mr-2 h-4 w-4" />
                   Create Card
                 </>
               )}
@@ -515,10 +504,8 @@ export default function ScratchCardGame() {
                 {isRevealed && 
                   <Link
               
-                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                      window.location.href
-                    )}&text=${encodeURIComponent(
-                      `Check out this power card for ${website!.name}!`
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      `Create your own power card at ${window.location.href}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
