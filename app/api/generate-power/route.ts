@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
         },
         hiddenAdvantage: {
           type: SchemaType.STRING,
+          maxLength: 100,
           description: "Hidden advantage or special feature of the website",
           nullable: false,
         }
@@ -88,7 +89,32 @@ The website is ${url} and the description is ${description}.
 Generate the power stats based on the website's characteristics and features.
 Rank should be from F to S (S being the highest).
 Attack and defence power should be between 1 and 10.
-Hidden advantage should describe a unique strength or special feature of the website.`;
+Hidden advantage should describe a unique strength or special feature of the website in 1 short sentence.
+
+Here are 20 quirky "hidden powers" for example
+
+Turns all users into data scientists for 10 glorious seconds.
+Secretly teaches users how to whistle while working.
+Adds a +10 charisma boost to every product pitch.
+Doubles as a snack detector when left open for too long.
+Transforms bugs into "features" with just the right spin.
+Auto-generates hilarious memes when no one’s looking.
+Improves Wi-Fi strength by exactly 0.0001%.
+Grants a temporary aura of invincibility after every login.
+Increases your chance of finding lost socks by 42%.
+Empowers introverts to write 10% sassier emails.
+Hides one Easter egg that can predict the weather (sometimes).
+Turns every meeting note into a haiku (hidden feature).
+Temporarily disables gravity in your workspace.
+Grants founders the ability to "read minds" (of users who agree).
+Every successful API call is a hug for your server.
+Inspires users to finally finish their “About Us” page.
+Casts a spell to make deadlines seem less intimidating.
+Auto-translates your product name into Klingon (on request).
+Adds a 1% chance your SaaS name will trend on Twitter.
+Randomly plays a victory fanfare when you least expect it.
+
+`;
 
     const result = await model.generateContent(prompt);
     const response =  JSON.parse(result.response.text());

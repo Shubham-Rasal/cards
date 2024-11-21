@@ -405,13 +405,13 @@ export default function ScratchCardGame() {
   };
 
   return (
-    <div className="min-h-screen   bg-[#1a1a1a] text-white p-6">
+    <div className="min-h-screen   bg-[#1a1a1a] text-white p-6 ">
       <div className="max-w-xs mx-auto space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col  items-center justify-center gap-2">
             <Input
               type="text"
-              placeholder="Enter your website URL (e.g., site.com)"
+              placeholder="Enter site URL"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
@@ -420,16 +420,16 @@ export default function ScratchCardGame() {
               autoCapitalize="off"
               pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
               disabled={inputDisabled}
-              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-400 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-500 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
             <Input
               type="text"
-              placeholder="Describe your SaaS in one line"
+              placeholder="Your SaaS, in one line"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
               disabled={inputDisabled}
-              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-400 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-500 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
             <Button
               onClick={isSubmitted ? handleReset : handleSubmit}
@@ -513,11 +513,11 @@ export default function ScratchCardGame() {
                 )}
               </div>
 
-              <div className="flex justify-between mt-4">
+              <div className="flex justify-between mt-4 gap-2 w-full">
                 <Button
                   onClick={handleShare}
                   disabled={isCopying || !website}
-                  className="px-6 py-2 h-full rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 text-emerald-400 hover:border-emerald-500/40 transition-colors duration-200 flex items-center gap-2"
+                  className="px-2 py-2 h-full rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 text-emerald-400 hover:border-emerald-500/40 transition-colors duration-200 flex items-center gap-2"
                 >
                   {isCopying ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -526,12 +526,18 @@ export default function ScratchCardGame() {
                   )}
                   {isCopying ? "Copying..." : "Copy Card"}
                 </Button>
-                <Link
+                {isRevealed && 
+                  <Link
               
-                  href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20sick%20website%20preview%20card!`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                      window.location.href
+                    )}&text=${encodeURIComponent(
+                      `Check out this power card for ${website!.name}!`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                
                 <Button
                   onClick={handleShare}
                   disabled={isCopying || !website}
@@ -543,7 +549,7 @@ export default function ScratchCardGame() {
                   Share on X
                 </Button>
                 </Link>
-
+                }
               </div>
             </motion.div>
           )}
@@ -570,7 +576,7 @@ export default function ScratchCardGame() {
                 </div>
               </div>
             </div>
-            <h2 className="text-xl font-semibold text-white mb-2">Enter your SaaS URL</h2>
+            <h2 className="text-base font-semibold text-white mb-2">Enter your SaaS URL</h2>
             <p className="text-gray-400">
               Enter the URL of your SaaS and describe it in one line to get started.
             </p>

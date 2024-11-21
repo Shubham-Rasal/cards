@@ -6,7 +6,6 @@ import { Cloud, Users, Zap, TrendingUp, Shield, Star, StarHalf } from 'lucide-re
 interface SaasCardProps {
   name?: string
   imageUrl?: string
-  description?: string
   url?: string
   rank?: string
   attackPower?: number
@@ -17,7 +16,6 @@ interface SaasCardProps {
 export function SaasCard({ 
   name = "example.com", 
   imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg",
-  description = "A cloud-native SaaS solution",
   url = "https://example.com",
   rank = "A",
   attackPower = 5,
@@ -25,7 +23,7 @@ export function SaasCard({
   hiddenAdvantage = "Has the power to make developers smile!"
 }: SaasCardProps) {
   return (
-    <div className="card-body h-[470px] w-[320px] border-2 border-emerald-500/20 rounded-xl relative bg-[#2c2c2c] text-emerald-50 shadow-xl shadow-emerald-200/20 z-0">
+    <div className="card-body h-[470px] w-[320px] border-2 border-emerald-500/20 rounded-xl relative  text-emerald-50 shadow-xl shadow-emerald-200/20 z-0">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-emerald-500/5 pointer-events-none" />
       <div className="relative z-10 p-2 space-y-4">
         <div className="relative w-full h-48 mx-auto overflow-hidden rounded-lg border border-emerald-500/20">
@@ -42,10 +40,10 @@ export function SaasCard({
               <span className="text-emerald-500">{name}</span>
             </h2>
 
-          <p className="text-sm text-emerald-400/80">{description}</p>
+      
           </div>
-          <div className="mt-2 p-2 bg-emerald-950/50 rounded-tr-lg rounded-br-lg border border-emerald-500/20">
-            <p className="text-sm italic text-emerald-300">✨ {hiddenAdvantage}</p>
+          <div className="my-1 p-1 rounded-tl-full rounded-br-full  bg-emerald-950/50 border border-emerald-500/20">
+            <p className="text-xs italic text-emerald-300">✨ {hiddenAdvantage}</p>
           </div>
         </div>
         <div className="space-y-3">
@@ -79,13 +77,17 @@ export function SaasCard({
                 <span className="text-sm">Rank</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className={`text-sm ${rank === 'S' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>S</span>
-                <span className={`text-sm ${rank === 'A' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>A</span>
-                <span className={`text-sm ${rank === 'B' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>B</span>
-                <span className={`text-sm ${rank === 'C' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>C</span>
-                <span className={`text-sm ${rank === 'D' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>D</span>
-                <span className={`text-sm ${rank === 'E' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>E</span>
-                <span className={`text-sm ${rank === 'F' ? 'text-emerald-500' : 'text-emerald-400/80'}`}>F</span>
+                {[...Array(6)].map((_, i) => {
+                  const letter = 'SABCDEF'[i]
+                  return (
+                    <div
+                      key={letter}
+                      className={`text-sm ${rank === letter ? 'bg-emerald-500/20 rounded px-1' : ''}`}
+                    >
+                      {letter}
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
