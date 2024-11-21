@@ -10,6 +10,7 @@ import html2canvas from "html2canvas";
 import { SaasCard } from "@/components/saas-card";
 import { formatTime } from "@/lib/utils";
 import Link from "next/link";
+import { toPng } from 'html-to-image';
 
 export default function ScratchCardGame() {
   const [url, setUrl] = useState("");
@@ -326,70 +327,78 @@ export default function ScratchCardGame() {
   };
 
   const handleShare = async () => {
-    if (!cardRef.current || !website) return;
-    
+    if (!cardRef.current || !website) {
+      toast.error("No card to share");
+      return;
+    }
+
     setIsCopying(true);
     try {
-      // Wait a brief moment for any animations to complete
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Get the card element
-      const cardElement = cardRef.current.querySelector('.card-body') as HTMLElement;
-      if (!cardElement) throw new Error('Card element not found');
-
-      // Convert the card element to an image
-      const canvas = await html2canvas(cardElement, {
-        useCORS: true,
-        logging: true,
-        allowTaint: true,
-        backgroundColor: '#25453b',
-
-        // scale: 2
-      });
-
-      // Wait a brief moment for the image to load
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Get the image data
-      const imageData = canvas.toDataURL('image/png');
-
-      // Wait a brief moment for the image data to load
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-
-
-      // Convert to blob and copy to clipboard
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob(
-          blob => blob ? resolve(blob) : reject(new Error('Failed to create blob')),
-          'image/png',
-          1.0
-        );
-      });
-
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'image/png': blob
-        })
-      ]);
-
-      toast("Copied to clipboard!", {
-        unstyled: true,
-        classNames: {
-          toast: 'bg-[#1a1a1a] border-2 border-emerald-500/20 rounded-lg p-4',
-          title: 'text-emerald-700 text-2xl font-bold',
-          description: 'text-emerald-300 text-sm',
-          actionButton: 'bg-zinc-400 px-4 py-2 rounded-lg',
-          cancelButton: 'bg-orange-400 px-4 py-2 rounded-lg',
-          closeButton: 'bg-lime-400 px-4 py-2 rounded-lg',
+      const dataUrl = await toPng(cardRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        skipAutoScale: true,
+        style: {
+          transform: 'scale(1)',
+          background: 'black',
+          width: '100%',
+          height: '100%',
+          margin: '0',
+          padding: '0',
+          border: 'none',
+          backgroundColor: 'black',
         },
       });
+
+      // Create a temporary canvas to handle the image
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise((resolve) => (img.onload = resolve));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Could not get canvas context');
+
+      // Draw the image on the canvas
+      ctx.drawImage(img, 0, 0);
+
+      // Convert to blob and share
+      const blob = await new Promise<Blob>((resolve) => 
+        canvas.toBlob((blob) => resolve(blob!), 'image/png', 1)
+      );
+
+      if (navigator.share) {
+        await navigator.share({
+          title: `${website.name} Power Card`,
+          text: `Check out this power card for ${website.name}!`,
+          files: [
+            new File([blob], 'power-card.png', {
+              type: 'image/png',
+            }),
+          ],
+        });
+        toast.success("Card shared successfully!");
+      } else if (navigator.clipboard) {
+        // Fallback to copying to clipboard
+        const clipboardItem = new ClipboardItem({
+          'image/png': blob,
+        });
+        await navigator.clipboard.write([clipboardItem]);
+        toast.success("Card image copied to clipboard!");
+      } else {
+        // Final fallback - download the image
+        const link = document.createElement('a');
+        link.download = 'power-card.png';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(link.href);
+        toast.success("Card image downloaded!");
+      }
     } catch (error) {
-      console.error('Error copying to clipboard:', error);
-      toast.error("Failed to copy", {
-        description: "There was an error copying the card. Please try again.",
-        duration: 3000,
-      });
+      console.error('Error sharing card:', error);
+      toast.error("Failed to share card");
     } finally {
       setIsCopying(false);
     }
@@ -397,7 +406,7 @@ export default function ScratchCardGame() {
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-white p-6">
-      <div className="max-w-sm mx-auto space-y-8">
+      <div className="max-w-xs mx-auto space-y-8">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col  items-center justify-center gap-2">
             <Input
@@ -454,12 +463,12 @@ export default function ScratchCardGame() {
             >
               <div
                 ref={cardRef}
-                className="w-full h-[550px] rounded-2xl overflow-hidden relative"
+                className="w-[320px] h-[460px] rounded-2xl overflow-hidden relative"
               >
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="absolute inset-0 flex flex-col items-center justify-center text-emerald-400 rounded-2xl bg-[#1a1a1a] border-2 border-emerald-500/20"
+                  className="absolute inset-0 flex flex-col items-center justify-center text-emerald-100 rounded-2xl bg-[#1a1a1a] border-2 border-emerald-500/20"
                 >
                   {website && (
                     <SaasCard
@@ -477,7 +486,7 @@ export default function ScratchCardGame() {
                   <div 
                     className={`absolute inset-0 z-10 ${
                       isSubmitted && !isRevealed 
-                        ? 'animate-pulse' 
+                        ? '' 
                         : ''
                     }`}
                   >
@@ -556,7 +565,7 @@ export default function ScratchCardGame() {
       </div>
 
       {/* Past Cards Section */}
-      {pastCards.length > 0 && (
+      {/* {pastCards.length > 0 && (
         <div className="mt-16 max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-emerald-400 mb-6">Past Creations</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -590,8 +599,7 @@ export default function ScratchCardGame() {
             ))}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
-

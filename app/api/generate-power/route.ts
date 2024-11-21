@@ -4,7 +4,7 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 export async function POST(request: NextRequest) {
   try {
-    const { url, description } = await request.json();
+    let { url, description } = await request.json();
 
     if (!url || !description) {
       return NextResponse.json(
@@ -12,6 +12,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    if (!url.startsWith('https://')) {
+      url = `https://${url}`;
+    }
+
+    
 
     const pageResponse = await fetch(url);
     if (!pageResponse.ok) {
