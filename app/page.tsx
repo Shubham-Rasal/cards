@@ -405,8 +405,8 @@ export default function ScratchCardGame() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-white p-6">
-      <div className="max-w-xs mx-auto space-y-8">
+    <div className="min-h-screen   bg-[#1a1a1a] text-white p-6">
+      <div className="max-w-xs mx-auto space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col  items-center justify-center gap-2">
             <Input
@@ -415,9 +415,12 @@ export default function ScratchCardGame() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
+              autoComplete="url"
+              autoCorrect="off"
+              autoCapitalize="off"
               pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
               disabled={inputDisabled}
-              className={`bg-[#1a1a1a] border-emerald-500/20 text-emerald-50 placeholder:text-emerald-500/50 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-400 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
             <Input
               type="text"
@@ -426,12 +429,12 @@ export default function ScratchCardGame() {
               onChange={(e) => setDescription(e.target.value)}
               required
               disabled={inputDisabled}
-              className={`bg-[#1a1a1a] border-emerald-500/20 text-emerald-50 placeholder:text-emerald-500/50 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-400 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
             <Button
               onClick={isSubmitted ? handleReset : handleSubmit}
               disabled={isLoading || !isValidUrl(url) || !description}
-              className={`w-full ${isSubmitted ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`}
+              className={`w-full border-4 border-emerald-600  ${isSubmitted ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`}
             >
               {isLoading ? (
                 <>
@@ -463,7 +466,9 @@ export default function ScratchCardGame() {
             >
               <div
                 ref={cardRef}
-                className="w-[320px] h-[460px] rounded-2xl overflow-hidden relative"
+                className={`w-[320px] h-[470px] rounded-2xl overflow-hidden relative shadow-xl shadow-emerald-500/50 ${
+                  isLoading ? 'animate-pulse' : ''
+                }`}
               >
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -498,7 +503,7 @@ export default function ScratchCardGame() {
                       onTouchStart={isSubmitted ? handleMouseDown : undefined}
                       onTouchEnd={isSubmitted ? handleMouseUp : undefined}
                       onTouchMove={isSubmitted ? handleMouseMove : undefined}
-                      className={`w-full h-full cursor-pointer rounded-xl border-2 ${
+                      className={`w-full h-full cursor-pointer rounded-2xl border-2 ${
                         isSubmitted && !isRevealed
                           ? 'border-emerald-500/50 shadow-md'
                           : 'border-emerald-500/20'
@@ -522,14 +527,23 @@ export default function ScratchCardGame() {
                   {isCopying ? "Copying..." : "Copy Card"}
                 </Button>
                 <Link
-                  className="px-6 py-2 rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 text-emerald-400 hover:border-emerald-500/40 transition-colors duration-200 flex items-center gap-2"
+              
                   href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20sick%20website%20preview%20card!`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                <Button
+                  onClick={handleShare}
+                  disabled={isCopying || !website}
+                  className="px-6 py-2 h-full rounded-xl bg-[#2c2c2c] border-2 border-emerald-500/20 text-emerald-400 hover:border-emerald-500/40 transition-colors duration-200 flex items-center gap-2"
+                >
+                  
+                
                   <X className="w-4 h-4" />
                   Share on X
+                </Button>
                 </Link>
+
               </div>
             </motion.div>
           )}
