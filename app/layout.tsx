@@ -22,6 +22,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+
+      <meta property="og:site_name" content="Power Card Generator" />
+        <meta property="og:title" content="Power Card Generator" />
+        <meta property="og:description" content="Get a power card for your website" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </head>
       <body
         className={`antialiased relative ${silkscreen.className} ${silkscreen.variable}`}
       >
