@@ -92,7 +92,7 @@ Rank should be from F to S (S being the highest).
 Attack and defence power should be between 1 and 10.
 Hidden advantage should describe a unique quirky thing of the website in 1 short sentence.
 
-Here are 20 quirky "hidden powers" for example
+The hidden power should be chosen from the following options:
 
 Turns all users into data scientists for 10 glorious seconds.
 Secretly teaches users how to whistle while working.
