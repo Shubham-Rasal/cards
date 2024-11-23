@@ -386,7 +386,7 @@ export default function ScratchCardGame() {
   };
 
   return (
-    <div className="min-h-screen text-white p-6">
+    <div className="min-h-screen max-h-screen text-white p-6">
       <div className="max-w-xs mx-auto space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col  items-center justify-center gap-2">
@@ -475,7 +475,7 @@ export default function ScratchCardGame() {
                       onTouchStart={isSubmitted ? handleMouseDown : undefined}
                       onTouchEnd={isSubmitted ? handleMouseUp : undefined}
                       onTouchMove={isSubmitted ? handleMouseMove : undefined}
-                      className={`w-full h-full cursor-pointer border-2 ${
+                      className={`w-full h-full cursor-pointer border-2 touch-action-none ${
                         isSubmitted && !isRevealed
                           ? 'border-emerald-500/50 shadow-md'
                           : 'border-emerald-500/20'
