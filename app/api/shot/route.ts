@@ -2,41 +2,39 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { url } = await request.json();
-
-    if (!url) {
-      return NextResponse.json({ error: 'URL is required' }, { status: 400 });
-    }
-
-    const encodedUrl = encodeURIComponent(url);
-    const apiKey = process.env.SCREENSHOTONE_API_KEY;
-
-    if (!apiKey) {
-      return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
-    }
-
-    const apiUrl = `https://api.screenshotone.com/take?access_key=${apiKey}&url=${encodedUrl}&format=jpg&block_ads=true&block_cookie_banners=true&block_banners_by_heuristics=false&block_trackers=true&delay=0&timeout=60&response_type=by_format&image_quality=80`;
-
-    const response = await fetch(apiUrl);
+    // Get a random Pokemon ID (there are currently 1008 Pokemon in the API)
+    const randomPokemonId = Math.floor(Math.random() * 1008) + 1;
+    
+    // Fetch Pokemon data from PokeAPI
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomPokemonId}`);
 
     if (!response.ok) {
-      throw new Error(`Screenshot API error: ${response.statusText}`);
+      throw new Error(`Pokemon API error: ${response.statusText}`);
     }
 
-    const imageBlob = await response.blob();
-    const arrayBuffer = await imageBlob.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const base64Image = buffer.toString('base64');
+    const pokemonData = await response.json();
 
-    return NextResponse.json({ 
-      screenshot: `data:image/jpeg;base64,${base64Image}` 
-    });
+    // Extract relevant Pokemon information
+    const pokemon = {
+      name: pokemonData.name,
+      id: pokemonData.id,
+      image: pokemonData.sprites.other['official-artwork'].front_default,
+      types: pokemonData.types.map((type: any) => type.type.name),
+      stats: {
+        hp: pokemonData.stats[0].base_stat,
+        attack: pokemonData.stats[1].base_stat,
+        defense: pokemonData.stats[2].base_stat,
+        speed: pokemonData.stats[5].base_stat,
+      }
+    };
+
+    return NextResponse.json(pokemon);
 
   } catch (error) {
-    console.error('Error taking screenshot:', error);
-    return NextResponse.json({ 
-      error: 'Failed to take screenshot',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    console.error('Error fetching Pokemon:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch Pokemon' },
+      { status: 500 }
+    );
   }
 }
