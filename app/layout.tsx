@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Silkscreen } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "sonner";
 
 const silkscreen = Silkscreen({
@@ -43,6 +44,7 @@ export default function RootLayout({
           
         </div>
         <Toaster richColors/>
+        <Analytics />
       </body>
     </html>
   );

@@ -398,7 +398,6 @@ export default function ScratchCardGame() {
               required
               autoCorrect="off"
               autoCapitalize="off"
-              pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
               disabled={inputDisabled}
               className={`bg-[#1a1a1a] border-emerald-300 border-2 text-emerald-50 placeholder:text-emerald-500 ${inputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
